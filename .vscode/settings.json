@@ -1,0 +1,30 @@
+{
+  "terminal.integrated.tabs.enabled": true,
+  "terminal.integrated.defaultProfile.windows": "Git Bash",
+  "liveServer.settings.donotShowInfoMsg": true,
+  "files.autoSave": "onFocusChange",
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "workbench.colorTheme": "Material Theme High Contrast",
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "prettier.tabWidth": 2,
+  "prettier.jsxSingleQuote": true,
+  "gitlens.hovers.currentLine.over": "line",
+  "gitlens.advanced.fileHistoryShowAllBranches": true,
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "rvest.vs-code-prettier-eslint"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "prettier.singleQuote": true,
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "diffEditor.ignoreTrimWhitespace": false,
+  "[git-rebase]": {
+    "workbench.editor.restoreViewState": false
+  },
+  "terminal.integrated.tabs.enabled": true,
+  "emmet.includeLanguages": {
+    "javascript": "javascriptreact"
+  }
+}

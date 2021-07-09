@@ -43,4 +43,73 @@ window.addEventListener('DOMContentLoaded', () => {
     setInterval(updateClock, 1000);
   };
   countTimer(2021, 6, 9);
+
+  //Меню
+  const toogleMenu = () => {
+    const btnMenu = document.querySelector('.menu'),
+      menu = document.querySelector('menu'),
+      closeBtn = document.querySelector('.close-btn'),
+      menuItem = menu.querySelectorAll('ul>li'),
+      arrowDown = document.querySelector('.arrow-down');
+
+    const handlerMenu = () => {
+      menu.classList.toggle('active-menu');
+    };
+
+    const scrollAnim = (item) => {
+      const blockID = item.getAttribute('href').substr(1);
+
+      document.getElementById(blockID).scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+    };
+
+    btnMenu.addEventListener('click', handlerMenu);
+    closeBtn.addEventListener('click', handlerMenu);
+    menuItem.forEach((item) =>
+      item.addEventListener('click', (e) => {
+        e.preventDefault();
+        scrollAnim(e.target);
+        handlerMenu();
+      })
+    );
+    arrowDown.addEventListener('click', (e) => {
+      e.preventDefault();
+      scrollAnim(e.target.parentElement);
+    });
+  };
+  toogleMenu();
+
+  //Pop up
+  const tooglePopUp = () => {
+    const popUp = document.querySelector('.popup'),
+      popUpContent = document.querySelector('.popup-content'),
+      popUpBtn = document.querySelectorAll('.popup-btn'),
+      popUpClose = document.querySelector('.popup-close');
+    let animIterator = null,
+      anim = 0;
+
+    const animPopUp = () => {
+      animIterator = requestAnimationFrame(animPopUp);
+      anim += 0.05;
+      if (anim <= 1) popUpContent.style.opacity = `${anim}`;
+      else {
+        cancelAnimationFrame(animIterator);
+        anim = 0;
+      }
+    };
+
+    popUpBtn.forEach((item) =>
+      item.addEventListener('click', () => {
+        popUp.style.display = `block`;
+        if (screen.width > 768) animPopUp();
+      })
+    );
+
+    popUpClose.addEventListener('click', () => {
+      popUp.style.display = `none`;
+    });
+  };
+  tooglePopUp();
 });
