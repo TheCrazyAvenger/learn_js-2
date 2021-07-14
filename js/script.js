@@ -65,10 +65,10 @@ window.addEventListener('DOMContentLoaded', () => {
 
     menu.addEventListener('click', (e) => {
       let target = e.target;
-      if (target.classList.contains('close-btn')) handlerMenu();
-      else {
-        target = target.closest('li');
-        if (target) {
+      if (target.classList.contains('close-btn')) {
+        handlerMenu();
+      } else {
+        if (target.closest('li') !== null) {
           e.preventDefault();
           scrollAnim(e.target);
           handlerMenu();
@@ -89,14 +89,15 @@ window.addEventListener('DOMContentLoaded', () => {
     const popUp = document.querySelector('.popup'),
       popUpContent = document.querySelector('.popup-content'),
       popUpBtn = document.querySelectorAll('.popup-btn');
-    let animIterator = null,
+    let animIterator,
       anim = 0;
 
     const animPopUp = () => {
       animIterator = requestAnimationFrame(animPopUp);
       anim += 0.05;
-      if (anim <= 1) popUpContent.style.opacity = `${anim}`;
-      else {
+      if (anim <= 1) {
+        popUpContent.style.opacity = `${anim}`;
+      } else {
         cancelAnimationFrame(animIterator);
         anim = 0;
       }
@@ -112,11 +113,11 @@ window.addEventListener('DOMContentLoaded', () => {
     popUp.addEventListener('click', (e) => {
       let target = e.target;
 
-      if (target.classList.contains('popup-close'))
+      if (target.classList.contains('popup-close')) {
         popUp.style.display = 'none';
-      else {
-        target = target.closest('.popup-content');
-        if (!target) popUp.style.display = 'none';
+      } else {
+        if (target.closest('.popup-content') === null)
+          popUp.style.display = 'none';
       }
     });
   };
@@ -141,13 +142,15 @@ window.addEventListener('DOMContentLoaded', () => {
     };
 
     tabHeader.addEventListener('click', (e) => {
-      let target = e.target;
+      const target = e.target;
 
-      target = target.closest('.service-header-tab');
-
-      if (target.classList.contains('service-header-tab')) {
+      if (
+        target
+          .closest('.service-header-tab')
+          .classList.contains('service-header-tab')
+      ) {
         tab.forEach((item, i) => {
-          item === target && toggleTabContent(i);
+          item === target.closest('.service-header-tab') && toggleTabContent(i);
         });
       }
     });
@@ -162,7 +165,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
     let currentSlide = 0,
       dot,
-      interval;
+      animIterator;
 
     const addDots = () => {
       [...slide].map((_, i) => {
@@ -176,8 +179,11 @@ window.addEventListener('DOMContentLoaded', () => {
     addDots();
 
     const checkCurrentSlide = () => {
-      if (currentSlide >= slide.length) currentSlide = 0;
-      else if (currentSlide < 0) currentSlide = slide.length - 1;
+      if (currentSlide >= slide.length) {
+        currentSlide = 0;
+      } else if (currentSlide < 0) {
+        currentSlide = slide.length - 1;
+      }
     };
 
     const toggleSlide = (items, i, strClass) =>
@@ -197,11 +203,11 @@ window.addEventListener('DOMContentLoaded', () => {
     };
 
     const startSlide = (timer = 3000) => {
-      interval = setInterval(autoPlaySlide, timer);
+      animIterator = setInterval(autoPlaySlide, timer);
     };
 
     const stopSlide = (e) => {
-      clearInterval(interval);
+      clearInterval(animIterator);
     };
 
     slider.addEventListener('click', (e) => {
@@ -264,24 +270,42 @@ window.addEventListener('DOMContentLoaded', () => {
       calcSquare = document.querySelector('.calc-square'),
       calcCount = document.querySelector('.calc-count'),
       calcDay = document.querySelector('.calc-day'),
+      calcCheckbox = document.getElementById('calc-checkbox'),
       totalValue = document.getElementById('total');
 
     const countSum = () => {
       let total = 0,
         countValue = 1,
-        dayValue = 1;
+        dayValue = 1,
+        count = 0,
+        animIterator;
       const typeValue = calcType.options[calcType.selectedIndex].value,
         squareValue = +calcSquare.value;
 
       if (calcCount.value > 1) countValue += (calcCount.value - 1) / 10;
 
-      if (calcDay.value && calcDay.value < 5) dayValue *= 2;
-      else if (calcDay.value && calcDay.value < 10) dayValue *= 1.5;
+      if (calcDay.value && calcDay.value < 5) {
+        dayValue *= 2;
+      } else if (calcDay.value && calcDay.value < 10) {
+        dayValue *= 1.5;
+      }
 
       if (typeValue && squareValue)
         total = price * squareValue * typeValue * countValue * dayValue;
 
-      totalValue.textContent = Math.floor(total);
+      if (calcCheckbox.checked) {
+        animIterator = setInterval(() => {
+          if (count < total) {
+            count++;
+            totalValue.textContent = count;
+          } else {
+            clearInterval(animIterator);
+            count = 0;
+          }
+        });
+      } else {
+        totalValue.textContent = Math.floor(total);
+      }
     };
 
     calcBlock.addEventListener('input', (e) => {
