@@ -317,4 +317,70 @@ window.addEventListener('DOMContentLoaded', () => {
     });
   };
   calc(100);
+
+  //send ajax-form
+  const sendForm = () => {
+    const errorMessage = 'Что-то пошло не так',
+      loadMessage = 'Загрузка...',
+      successMessage = 'Спасибо! Мы скоро с вами свяжемся';
+
+    const statusMessage = document.createElement('div');
+    statusMessage.style.color = 'white';
+
+    const clearInputs = (inputs) => {
+      inputs.forEach((item) => {
+        item.value = '';
+      });
+    };
+
+    const postData = (body, outputData, errorData) => {
+      const request = new XMLHttpRequest();
+
+      request.addEventListener('readystatechange', () => {
+        if (request.readyState !== 4) {
+          return;
+        }
+        if (request.status === 200) {
+          outputData();
+        } else {
+          errorData(request.status);
+        }
+      });
+
+      request.open('POST', './server.php');
+      request.setRequestHeader('Content-Type', 'application/json');
+      request.send(JSON.stringify(body));
+    };
+
+    const getData = (currForm) => {
+      currForm.appendChild(statusMessage);
+      statusMessage.textContent = loadMessage;
+
+      const formData = new FormData(currForm);
+      let body = {};
+      formData.forEach((val, key) => {
+        body[key] = val;
+      });
+
+      postData(
+        body,
+        () => {
+          statusMessage.textContent = successMessage;
+        },
+        (error) => {
+          statusMessage.textContent = errorMessage;
+          console.error(error);
+        }
+      );
+    };
+    document.addEventListener('submit', (e) => {
+      if (e.target.closest('form') !== null) {
+        e.preventDefault();
+        const formInputs = e.target.closest('form').querySelectorAll('input');
+        getData(e.target.closest('form'));
+        clearInputs(formInputs);
+      }
+    });
+  };
+  sendForm();
 });
