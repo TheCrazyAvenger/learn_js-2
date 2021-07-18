@@ -26,5 +26,6 @@
   "terminal.integrated.tabs.enabled": true,
   "emmet.includeLanguages": {
     "javascript": "javascriptreact"
-  }
+  },
+  "php.validate.executablePath": "server.php"
 }
