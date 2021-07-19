@@ -17,16 +17,22 @@ const toggleMenu = () => {
     });
   };
 
-  menu.addEventListener('click', (e) => {
+  document.addEventListener('click', (e) => {
     let target = e.target;
     if (target.classList.contains('close-btn')) {
       handlerMenu();
-    } else {
-      if (target.closest('li') !== null) {
-        e.preventDefault();
-        scrollAnim(e.target);
-        handlerMenu();
-      }
+    }
+    if (
+      target.closest('a') !== null &&
+      target.getAttribute('href') !== '#close' &&
+      target.closest('menu') !== null
+    ) {
+      e.preventDefault();
+      scrollAnim(e.target);
+      handlerMenu();
+    }
+    if (target.closest('menu') === null && target.closest('.menu') === null) {
+      menu.classList.remove('active-menu');
     }
   });
 
